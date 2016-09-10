@@ -27,7 +27,11 @@ public class dest : MonoBehaviour
         {
             animator=gameObject.GetComponent<Animator>();
             animator.SetBool("Walking", true);
-            GameObject.FindObjectOfType<Spot>().bossConstHp = hp;
+            if (gameObject.tag=="Boss")
+            {
+                GameObject.FindObjectOfType<Spot>().bossConstHp = hp;
+            }
+            
         }
         effects = "Active effects:\n";
         gameObject.name = gameObject.name.Substring(0, gameObject.name.Length - 7);

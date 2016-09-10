@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Spot : MonoBehaviour {
 
     public GameObject enemy;
+    public List<GameObject> enemiesL;
     public GameObject ogrePref;
     GameObject _bossClone;
     public GameObject hpbar;

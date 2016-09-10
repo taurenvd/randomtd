@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
-
+using System.IO;
+using System.Xml.Serialization;
 
 public class UI : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class UI : MonoBehaviour
     public bool wait = false;
     public bool chosePlatform = false;
     bool gameOver = false;
+    int inverse =0;
 
     public Button menu;
     public Button restart;
@@ -76,12 +78,20 @@ public class UI : MonoBehaviour
     public List<string> towerTypesL;
     public List<string> platformNameL;
     public List<string> parent;
-
+ 
     public ColorBlock z = new ColorBlock();
   //---------------------------------------------------------------------------------------
   // UNITY Section
     void Start()
     {
+        #region Loading settings from settings.ini
+        var xml = new XmlSerializer(typeof(SettingsSC));
+        FileStream f = new FileStream(Application.persistentDataPath + "/settings.ini", FileMode.Open);
+        var k = (SettingsSC)xml.Deserialize(f);
+        FindObjectOfType<AudioSource>().volume = k.volume;
+        FindObjectOfType<AudioSource>().mute = k.mute;
+        Debug.Log(FindObjectOfType<AudioSource>().volume);
+        #endregion
         StartCoroutine(RandPrice());
         TowerTypeDownload(TowerType);
         StartCoroutine(Message(centerText, "Wave " + waveCount));
@@ -109,6 +119,24 @@ public class UI : MonoBehaviour
     }
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (inverse % 2 == 0)
+            {
+                Time.timeScale = 0f;
+                StartCoroutine(Message(centerText, "Paused", 0.1f));
+                inverse++;
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                StartCoroutine(Message(centerText, "", 0.1f));
+                inverse++;
+            }
+        }
+     
+
         var mas =new List<GameObject>( GameObject.FindGameObjectsWithTag("Updated"));
         foreach (var item in mas)
         {
@@ -158,7 +186,7 @@ public class UI : MonoBehaviour
     public void OnMenuClick()
     {
         Time.timeScale = 0f;
-        StartCoroutine(Message(centerText,"Pause"));
+        StartCoroutine(Message(centerText, "Pause", 0.1f));
         State(restart.gameObject, resume.gameObject, exit.gameObject);
         if (!restart.gameObject.activeSelf)
         {
@@ -532,7 +560,10 @@ public class UI : MonoBehaviour
         text.text =""+message;
         yield return new WaitForSeconds(delay);
         text.text ="";
-
+        if (text == centerText)
+        {
+            CenterPanel.gameObject.SetActive(false);
+        }
 
     }
   public  IEnumerator TowerBuild(string type, int towerCost)

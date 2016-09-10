@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 using System.Collections.Generic;
 
-[CustomEditor(typeof(Spot))]
+[CustomEditor(typeof(Container))]
 public class GOAdder : Editor {
 
     public List<GameObject> m = new List<GameObject>();
@@ -12,7 +12,7 @@ public class GOAdder : Editor {
     public int choice;
     public override void OnInspectorGUI()
     {
-        Spot spot = (Spot)target;
+        Container spot = (Container)target;
         if (spot.enemy == null)
         {
 

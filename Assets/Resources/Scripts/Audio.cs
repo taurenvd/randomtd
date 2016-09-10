@@ -12,6 +12,7 @@ public class Audio : MonoBehaviour {
     void Start() {
    
         audio.Play();
+   
     }
 
     // Update is called once per frame

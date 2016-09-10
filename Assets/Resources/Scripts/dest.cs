@@ -41,57 +41,56 @@ public class dest : MonoBehaviour
     {
         if (hp <= 0)
         {
+
             if (gameObject.GetComponent<Animator>() != null && !death)
             {
                 StartCoroutine(DeathClip(gameObject, 2));
                 death = true;
-            }
-            if (gameObject.tag=="Mobs")
-            {
                 Reward();
-            }
-            GameObject.FindObjectOfType<UI>().deadCreeps++;
+                GameObject.FindObjectOfType<UI>().deadCreeps++;
+            }      
+
         }
-        
-           info =gameObject.name+"\n" +"HP= " + hp.ToString() + "\nMS= " + agent.speed;
-      
+
+        info =gameObject.name+"\n" +"HP= " + hp.ToString() + "\nMS= " + agent.speed;    
 
     }
     void OnTriggerEnter(Collider other)
     {
-
-
-   
-        if (other.gameObject.name == "Destination")
+        if (other.gameObject.tag == "Finish")
         {
-
             Destroy(gameObject);
-            if (gameObject.name == "Boss(Clone)")
+            if (gameObject.tag == "Boss")
             {
                 GameObject.FindObjectOfType<UI>().lives -= 10;
-               
+              
 
             }
             else GameObject.FindObjectOfType<UI>().lives--;
             GameObject.FindObjectOfType<UI>().deadCreeps++;
         }
+   
+
     }
 
     void Reward()
     {
-            GameObject.FindObjectOfType<UI>().gold += 5 * (int)GameObject.FindObjectOfType<UI>().waveCount;
-            Destroy(gameObject); 
+        if (gameObject.tag == "Boss")
+        {
+            GameObject.FindObjectOfType<UI>().gold += 50 * (int)GameObject.FindObjectOfType<UI>().waveCount;
+        }
+        else GameObject.FindObjectOfType<UI>().gold += 5 * (int)GameObject.FindObjectOfType<UI>().waveCount;
+        
     }
 
     IEnumerator DeathClip(GameObject target,float aniTime)
     {
         target.tag = "Untagged";
         agent.Stop();
-        GameObject.FindObjectOfType<UI>().gold += 50 * (int)GameObject.FindObjectOfType<UI>().waveCount;
         target.GetComponent<NavMeshAgent>().speed = 0;
         target.GetComponent<Animator>().Play("Death");
        yield return new WaitForSeconds(aniTime);
-      Destroy(target);
+        Destroy(target);
 
     }
 }

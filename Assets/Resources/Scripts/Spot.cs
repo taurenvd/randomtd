@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class Spot : MonoBehaviour {
 
     public GameObject enemy;
-    public List<GameObject> enemiesL;
+    public GameObject[] enemiesL;
     public GameObject ogrePref;
-    GameObject _bossClone;
+    public GameObject _bossClone;
     public GameObject hpbar;
 
     public int nCreeps=1;
@@ -28,26 +28,29 @@ public class Spot : MonoBehaviour {
         hpbar.SetActive(false);
         Instantiate(enemy, gameObject.GetComponent<Transform>().position, gameObject.GetComponent<Transform>().rotation);
          boss = true;
+     
     }
 	
 	void Update ()
     {
-        //spawner;
         if (currentTime <= 0&& (GameObject.FindObjectOfType<UI>().creepsOnWave>nCreeps))
         {
             if ((GameObject.FindObjectOfType<UI>().waveCount%BossDiv)==0&&boss==true)
             {
-                _bossClone=(GameObject)Instantiate(ogrePref, gameObject.GetComponent<Transform>().position, gameObject.GetComponent<Transform>().rotation);
+                _bossClone=(GameObject)Instantiate(enemiesL[Random.Range(0, enemiesL.Length)], gameObject.GetComponent<Transform>().position, gameObject.GetComponent<Transform>().rotation);
                 FindObjectOfType<Audio>().audio.volume = 1f;
                 FindObjectOfType<Audio>().PlaySound(FindObjectOfType<Audio>().boss);
 
-
+                _bossClone.GetComponent<dest>().name="(Boss)"+ _bossClone.GetComponent<dest>().name;
+                _bossClone.GetComponent<Transform>().localScale*=1.5f ;
+                _bossClone.GetComponent<dest>().tag = "Boss";
+                _bossClone.GetComponent<dest>().hp*=10;
 
                 boss = false;
              
                 
             }
-            else Instantiate(enemy, gameObject.GetComponent<Transform>().position, gameObject.GetComponent<Transform>().rotation);
+            else Instantiate(enemiesL[Random.Range(0,enemiesL.Length)], gameObject.GetComponent<Transform>().position, gameObject.GetComponent<Transform>().rotation);
             currentTime= spawnTime;
             nCreeps++;        }
         else currentTime -= Time.deltaTime;
@@ -64,17 +67,18 @@ public class Spot : MonoBehaviour {
         }
         else
         {
+           
             green.localScale = new Vector3(1, green.localScale.y, green.localScale.z);
             hpbar.SetActive(false);
             if (!FindObjectOfType<Audio>().audio.isPlaying&&!FindObjectOfType<UI>().wait)
             {
                 FindObjectOfType<Audio>().audio.Stop();
                 FindObjectOfType<Audio>().PlaySound(FindObjectOfType<Audio>().main);
-                Debug.Log(FindObjectOfType<Audio>().audio.clip);
             }
 
 
            boss = true;
+            _bossClone = null;
         }
 
     }

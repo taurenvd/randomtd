@@ -15,7 +15,8 @@ public class SaveLoad : MonoBehaviour
     {
         save.onClick.AddListener(Save);
         load.onClick.AddListener(Load);
-   
+
+     
     }
     void Update()
     {

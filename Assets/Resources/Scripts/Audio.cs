@@ -9,10 +9,9 @@ public class Audio : MonoBehaviour {
     public AudioSource audio;
     public float volume;
     // Use this for initialization
-    void Start() {
-   
+    void Start()
+    {
         audio.Play();
-   
     }
 
     // Update is called once per frame
@@ -22,6 +21,7 @@ public class Audio : MonoBehaviour {
     }
     public void PlaySound(AudioClip a)
     {
+       
         audio.Stop();
         audio.volume = 1f;
         audio.clip = a;

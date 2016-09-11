@@ -33,10 +33,10 @@ public class SaveLoad : MonoBehaviour
 
     public  void Save()
     {
-        FileStream file = File.Open(Application.persistentDataPath + "/savedGames.rsave",FileMode.OpenOrCreate);
+        var file = File.Create(Application.persistentDataPath + "/savedGames.rsave");
        
         var xs = new XmlSerializer(typeof(SerClass));
-        var sC = new SerClass();
+        var sC = ScriptableObject.CreateInstance<SerClass>();
 
         sC.gold = FindObjectOfType<UI>().gold;
         sC.lives = FindObjectOfType<UI>().lives;
@@ -65,9 +65,13 @@ public class SaveLoad : MonoBehaviour
     {
         if (File.Exists(Application.persistentDataPath + "/savedGames.rsave"))
         {
-
-            var sc2 = new SerClass();
-            FileStream file = File.Open(Application.persistentDataPath + "/savedGames.rsave", FileMode.Open);
+            foreach (var item in GameObject.FindGameObjectsWithTag("Buildings"))
+            {
+                Destroy(item);
+            }
+            
+            var sc2 = ScriptableObject.CreateInstance<SerClass>();
+            var file = File.Open(Application.persistentDataPath + "/savedGames.rsave", FileMode.Open);
             var xml = new XmlSerializer(typeof(SerClass));
             sc2=(SerClass)xml.Deserialize(file);
             

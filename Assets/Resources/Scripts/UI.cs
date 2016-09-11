@@ -70,6 +70,9 @@ public class UI : MonoBehaviour
     public Button shop;
     public Button upgrade;
     public Button sell;
+    public Button safe;
+    public Button load;
+    public Button options;
 
     public List<GameObject> platformsL = new List<GameObject>();
     public List<GameObject> towers;
@@ -80,27 +83,20 @@ public class UI : MonoBehaviour
     public List<string> parent;
  
     public ColorBlock z = new ColorBlock();
+
+    public GameObject settings;
   //---------------------------------------------------------------------------------------
   // UNITY Section
     void Start()
     {
-        #region Loading settings from settings.ini
-        var xml = new XmlSerializer(typeof(SettingsSC));
-        FileStream f = new FileStream(Application.persistentDataPath + "/settings.ini", FileMode.Open);
-        var k = (SettingsSC)xml.Deserialize(f);
-        FindObjectOfType<AudioSource>().volume = k.volume;
-        FindObjectOfType<AudioSource>().mute = k.mute;
-        Debug.Log(FindObjectOfType<AudioSource>().volume);
-        #endregion
+
+       
         StartCoroutine(RandPrice());
         TowerTypeDownload(TowerType);
         StartCoroutine(Message(centerText, "Wave " + waveCount));
 
         mobsLeft.text = "  Wave:Creeps count " + creepsOnWave + "\n  Creeps left: " + (creepsOnWave - deadCreeps);
-        livesT.text = "Lives: " + lives + "  ";
-
-        State(restart.gameObject, resume.gameObject, exit.gameObject);
-        State(build.gameObject, buyLife.gameObject, random.gameObject);
+        livesT.text = "Lives: " + lives + "  ";      
         foreach (var item in GameObject.FindGameObjectsWithTag("Platforms"))
         {
             platformNameL.Add(item.name);
@@ -120,6 +116,10 @@ public class UI : MonoBehaviour
     void Update()
     {
 
+        if (options.isActiveAndEnabled==false&&settings.GetComponentInChildren<Text>().isActiveAndEnabled)
+        {
+            settings.SetActive(false);
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (inverse % 2 == 0)
@@ -144,8 +144,6 @@ public class UI : MonoBehaviour
             item.gameObject.GetComponentInChildren<Text>().text=after[0]+" "  + price;
         
         }
-     
-        List<GameObject> towers = new List<GameObject>(GameObject.FindGameObjectsWithTag("Buildings"));
         random.GetComponentInChildren<Text>().text = "Random: " + price;
         RandomEvent();
         LabelManager();
@@ -177,17 +175,13 @@ public class UI : MonoBehaviour
     public void OnShopClick()
     {
 
-
-        State(build.gameObject, buyLife.gameObject, random.gameObject);
-
-
-
+        SetActiveRec(build.gameObject,buyLife.gameObject,random.gameObject);
     }
     public void OnMenuClick()
     {
         Time.timeScale = 0f;
         StartCoroutine(Message(centerText, "Pause", 0.1f));
-        State(restart.gameObject, resume.gameObject, exit.gameObject);
+       
         if (!restart.gameObject.activeSelf)
         {
             Time.timeScale = 1f;
@@ -201,7 +195,7 @@ public class UI : MonoBehaviour
     public void OnResumeClick()
     {
         Time.timeScale = 1;
-        State(restart.gameObject, resume.gameObject, exit.gameObject);
+        
     }
     public void OnRestartClick()
     {
@@ -267,7 +261,7 @@ public class UI : MonoBehaviour
         if (lives <= 0)
         {
             Time.timeScale = 0f;
-            centerText.text = "Game Over!";
+            centerText.text = "Game Over for ";
 
             if (!gameOver)
             {
@@ -337,7 +331,9 @@ public class UI : MonoBehaviour
         if (Input.GetButtonDown("Fire2"))
         {
             statusPanel.gameObject.SetActive(false);
-            State(build.gameObject, buyLife.gameObject, random.gameObject, false);
+            build.gameObject.SetActive(false);
+            buyLife.gameObject.SetActive(false);
+            random.gameObject.SetActive(false);
         }
         if (target != null && (target.tag == "Buildings" || target.tag == "Mobs" || target.tag == "Boss"))
         {
@@ -394,23 +390,16 @@ public class UI : MonoBehaviour
     /// <summary>
     /// Inverse state changing 
     /// </summary>
-    void State(GameObject one, GameObject two, GameObject three)
+    public void SetActiveRec(params GameObject[] GO)
     {
-        one.SetActive(!one.gameObject.activeInHierarchy);
-        two.SetActive(!two.gameObject.activeInHierarchy);
-        three.SetActive(!three.gameObject.activeInHierarchy);
+        foreach (var item in GO)
+        {
+            item.SetActive(!item.gameObject.activeInHierarchy);
+
+        }
 
     }
-    /// <summary>
-    /// Changing state of 3 GO 
-    /// </summary>
-    void State(GameObject one, GameObject two, GameObject three, bool state)
-    {
-        one.SetActive(state);
-        two.SetActive(state);
-        three.SetActive(state);
-
-    }
+    public void SetActiveRec(GameObject go) { go.SetActive(!go.activeSelf); }
     public void DeleteNullFromList(List<GameObject> k)
     {
 
@@ -428,11 +417,6 @@ public class UI : MonoBehaviour
         {
             item.layer = layer;
         }
-    }
-    public void ShowTips(Transform tip)
-    {
-        tip.gameObject.SetActive(!tip.gameObject.active);
-
     }
     public void Log(Transform panel)
     {
@@ -533,7 +517,7 @@ public class UI : MonoBehaviour
         }
 
     }
-    IEnumerator Message(Text text, string message)
+ public   IEnumerator Message(Text text, string message)
     {
         //TODO:redo this
         if (text == centerText)
@@ -549,7 +533,7 @@ public class UI : MonoBehaviour
         }
 
     }
-    IEnumerator Message(Text text, string message, float delay)
+   public IEnumerator Message(Text text, string message, float delay)
     {
         GameObject bufBlog;
         bufBlog = (GameObject)Instantiate(blog, option.position, option.rotation);

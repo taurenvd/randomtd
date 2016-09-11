@@ -19,17 +19,15 @@ public class Stun : MonoBehaviour {
         }
         target.GetComponent<dest>().effects += "Stun ";
 
-        if (target.tag == "Boss")
+        if (target.GetComponent<Animator>() != null)
         {
-
-            target.GetComponent<Animator>().SetBool("Walking", false);
-            target.GetComponent<Animator>().SetBool("Stun", true);
+               target.GetComponent<Animator>().SetBool("Stun", true);
         }
         target.GetComponent<NavMeshAgent>().Stop();
         yield return new WaitForSeconds(duration);
-        if (target.tag == "Boss")
+        if (target.GetComponent<Animator>() != null)
         {
-            target.GetComponent<Animator>().SetBool("Walking", true);
+           
             target.GetComponent<Animator>().SetBool("Stun", false);
         }
         target.GetComponent<dest>().effects = target.GetComponent<dest>().effects.Replace("Stun ", "");

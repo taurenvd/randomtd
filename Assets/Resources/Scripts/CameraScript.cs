@@ -1,45 +1,64 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraScript : MonoBehaviour {
+public class CameraScript : MonoBehaviour
+{
     public Camera Mcamera;
-   
+    public int edge;
+    public float step; 
     int[] id;
-	void Start ()
-    {
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    void Start()
     {
 
-        if (Input.GetKey(KeyCode.A) &&Mcamera.transform.position.x >215)
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Q)|| Input.mouseScrollDelta.y<0)
+            
+            if (Mcamera.transform.position.y < 300)
+            {
+                Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y + step, Mcamera.transform.position.z);
+            }
+
+        if (Input.GetKey(KeyCode.Q) || Input.mouseScrollDelta.y > 0)
+            if (Mcamera.transform.position.y > 175)
+            {
+                Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y - step, Mcamera.transform.position.z);
+            }
+     //   Debug.Log(Input.mousePosition);
+        if (Input.mousePosition.x > Screen.width - edge|| Input.GetKey(KeyCode.D))
         {
-            Mcamera.transform.position=new Vector3(Mcamera.transform.position.x-3,Mcamera.transform.position.y,Mcamera.transform.position.z );
+         //   Debug.Log("right edge");
+            if (Mcamera.transform.position.x < 305)
+            {
+
+                Mcamera.transform.position = new Vector3(Mcamera.transform.position.x + step, Mcamera.transform.position.y, Mcamera.transform.position.z);
+            }
         }
-        if (Input.GetKey(KeyCode.D)&& Mcamera.transform.position.x < 305)
+        if (Input.mousePosition.x < edge|| Input.GetKey(KeyCode.A))
         {
-            Mcamera.transform.position = new Vector3(Mcamera.transform.position.x + 3, Mcamera.transform.position.y, Mcamera.transform.position.z);
+         //   Debug.Log("left edge");
+            if (Mcamera.transform.position.x >215)
+            {
+                Mcamera.transform.position = new Vector3(Mcamera.transform.position.x - step, Mcamera.transform.position.y, Mcamera.transform.position.z);
+            }
         }
-        if (Input.GetKey(KeyCode.W)&& Mcamera.transform.position.z <295)
+        if (Input.mousePosition.y > Screen.height - edge || Input.GetKey(KeyCode.W))
         {
-            Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y, Mcamera.transform.position.z+3);
+         //   Debug.Log("top edge");
+            if (Mcamera.transform.position.z < 300)
+            {
+                Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y, Mcamera.transform.position.z+ step);
+            }
         }
-        if (Input.GetKey(KeyCode.S)&&Mcamera.transform.position.z>-12f)
+        if (Input.mousePosition.y < edge || Input.GetKey(KeyCode.S))
         {
-            Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y, Mcamera.transform.position.z-3);
+         //   Debug.Log("botom edge");
+            if (Mcamera.transform.position.z > -12f)
+            {
+                Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y, Mcamera.transform.position.z- step);
+            }
         }
-        if (Input.GetKey(KeyCode.Q)&& Mcamera.transform.position.y<300)
-        {
-            Mcamera.transform.position= new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y+3, Mcamera.transform.position.z);
-        }
-        if (Input.GetKey(KeyCode.E) && Mcamera.transform.position.y > 175)
-        {
-            Mcamera.transform.position = new Vector3(Mcamera.transform.position.x, Mcamera.transform.position.y - 3, Mcamera.transform.position.z);
-        }
-      //  Debug.Log( Input.mousePosition);
-      
-      
     }
 }

@@ -72,8 +72,8 @@ public class UI : MonoBehaviour
     public Button shop;
     public Button upgrade;
     public Button sell;
-    public Button safe;
-    public Button load;
+    public Button SaveB;
+    public Button LoadB;
     public Button options;
 
     public List<GameObject> platformsL = new List<GameObject>();
@@ -91,11 +91,12 @@ public class UI : MonoBehaviour
   //---------------------------------------------------------------------------------------
   // UNITY Section
     void Start()
-    { 
+    {
+        SaveB.onClick.AddListener(OnSafeClick);
+
         StartCoroutine(RandPrice());
         TowerTypeDownload(TowerType);
         StartCoroutine(Message(centerText, "Wave " + waveCount));
-
         mobsLeft.text = "  Wave:Creeps count " + creepsOnWave + "\n  Creeps left: " + (creepsOnWave - deadCreeps);
         livesT.text = "Lives: " + lives + "  ";      
         foreach (var item in GameObject.FindGameObjectsWithTag("Platforms"))
@@ -103,14 +104,9 @@ public class UI : MonoBehaviour
             platformNameL.Add(item.name);
             platformsL.Add(item);
         }
-        
         statusPanel.gameObject.SetActive(false);
-
-
         z.pressedColor = shop.colors.pressedColor;
-
         z.colorMultiplier = shop.colors.colorMultiplier;
-
         StartCoroutine(ColorChanger(random, Color.yellow, Color.red, 5f));
 
     }
@@ -126,7 +122,7 @@ public class UI : MonoBehaviour
             if (inverse % 2 == 0)
             {
                 Time.timeScale = 0f;
-                StartCoroutine(Message(centerText, "Paused", 0.1f));
+                StartCoroutine(Message(centerText, "Pause", 0.1f));
                 inverse++;
             }
             else
@@ -182,12 +178,6 @@ public class UI : MonoBehaviour
     {
         Time.timeScale = 0f;
         StartCoroutine(Message(centerText, "Pause", 0.1f));
-       
-        if (!restart.gameObject.activeSelf)
-        {
-            Time.timeScale = 1f;
-        }
-
     }
     public void OnExitClick()
     {
@@ -281,7 +271,7 @@ public class UI : MonoBehaviour
                 gameOver = true;
 
         }
-        if ((creepsOnWave - deadCreeps) <= 0 && !wait)
+        if ((creepsOnWave - deadCreeps) <= 0 && !wait&&!gameOver)
         {
             
             StartCoroutine(Message(centerText, "You survived!",2f));
@@ -347,8 +337,8 @@ public class UI : MonoBehaviour
             restart.gameObject.SetActive(false);
             resume.gameObject.SetActive(false);
             options.gameObject.SetActive(false);
-            safe.gameObject.SetActive(false);
-            load.gameObject.SetActive(false);
+            SaveB.gameObject.SetActive(false);
+            LoadB.gameObject.SetActive(false);
             exit.gameObject.SetActive(false);
             Content.parent.gameObject.SetActive(false);
             if (logPanel.parent.transform.position.y>0) logPanel.parent.transform.position = new Vector3(logPanel.parent.transform.position.x,- logPanel.parent.transform.position.y, logPanel.parent.transform.position.z);
@@ -379,7 +369,7 @@ public class UI : MonoBehaviour
             StartCoroutine(Message(GetComponentInParent<Text>(), " Not Enough Gold!", 3));
             return;
         }
-        else gold -= price;
+        else gold -= price*target.GetComponent<fire>().level;
         target.GetComponent<Upgrade>().LevelUp();
     }
     public void Sell()
@@ -552,7 +542,10 @@ public class UI : MonoBehaviour
         bufBlog.transform.SetParent(option.transform);
         bufBlog.tag ="Untagged";
         bufBlog.GetComponent<Text>().text = message;
-
+        if (text == centerText)
+        {
+            CenterPanel.gameObject.SetActive(true);
+        }
         text.text =""+message;
         yield return new WaitForSeconds(delay);
         text.text ="";
@@ -665,5 +658,9 @@ public class UI : MonoBehaviour
            
         }
     
+    }
+    void OnSafeClick()
+    {
+        StartCoroutine(Message(centerText,"Succesfully saved!",1f));
     }
 }

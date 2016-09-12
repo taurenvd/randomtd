@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<SerClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name />
+  <hideFlags>None</hideFlags>
+  <gold>241</gold>
+  <lives>20</lives>
+  <wave>1</wave>
+  <score>1</score>
+  <mCam>
+    <x>214</x>
+    <y>250</y>
+    <z>87</z>
+  </mCam>
+  <randomTimer>291.352661</randomTimer>
+  <towersPos>
+    <Vector3>
+      <x>78.82599</x>
+      <y>19.7383728</y>
+      <z>188.511353</z>
+    </Vector3>
+    <Vector3>
+      <x>78.82599</x>
+      <y>19.7383728</y>
+      <z>225.511353</z>
+    </Vector3>
+  </towersPos>
+  <towerName>
+    <string>Poison</string>
+    <string>Sniper</string>
+  </towerName>
+  <parent>
+    <string>Node (24)</string>
+    <string>Node (25)</string>
+  </parent>
+  <levels>
+    <int>1</int>
+    <int>1</int>
+  </levels>
+  <platforms>
+    <string>Node (26)</string>
+    <string>Node (15)</string>
+    <string>Node (23)</string>
+    <string>Node (20)</string>
+    <string>Node (29)</string>
+    <string>Node (22)</string>
+    <string>Node (2)</string>
+    <string>Node (28)</string>
+    <string>Node (27)</string>
+    <string>Node (1)</string>
+    <string>Node (19)</string>
+    <string>Node (18)</string>
+    <string>Node (10)</string>
+    <string>Node (9)</string>
+    <string>Node (5)</string>
+    <string>Node (13)</string>
+    <string>Node (11)</string>
+    <string>Node (7)</string>
+    <string>Node</string>
+    <string>Node (17)</string>
+    <string>Node (4)</string>
+    <string>Node (14)</string>
+    <string>Node (12)</string>
+    <string>Node (21)</string>
+    <string>Node (30)</string>
+    <string>Node (16)</string>
+    <string>Node (6)</string>
+    <string>Node (3)</string>
+    <string>Node (8)</string>
+  </platforms>
+  <playerName>sdfsdfsdf</playerName>
+</SerClass>

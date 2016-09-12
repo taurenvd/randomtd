@@ -9,7 +9,7 @@ public class dest : MonoBehaviour
 
     public GameObject Finish;
 
-    public int hp = 10;
+    public int hp;
     public int destroyedCreepsCount=0;
   
     public string effects;
@@ -19,6 +19,7 @@ public class dest : MonoBehaviour
 //--------------------------------------------------------------
     void Start()
     {
+        hp *= FindObjectOfType<UI>().waveCount;
         if (agent != null)
         {
             agent.destination = Finish.transform.position;

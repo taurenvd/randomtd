@@ -15,9 +15,11 @@ public class Settings : MonoBehaviour
         k.volume = slider.value;
         k.mute = toggle.isOn;
         k.playerName = playerName.text;
+
         Debug.Log(playerName.text);
-        var f = File.Create(Application.persistentDataPath + "/settings.ini");
-        var xml = new XmlSerializer(typeof(SettingsSC));
+        var f = File.Create(Application.dataPath+"/settings.ini");
+        Debug.Log(Application.dataPath);
+         var xml = new XmlSerializer(typeof(SettingsSC));
         xml.Serialize(f, k);
         f.Close();
     }
@@ -26,10 +28,10 @@ public class Settings : MonoBehaviour
         var k = ScriptableObject.CreateInstance<SettingsSC>();
 
         var xml = new XmlSerializer(typeof(SettingsSC));
-        if (File.Exists(Application.persistentDataPath + "/settings.ini"))
+        if (File.Exists(Application.dataPath + "/settings.ini"))
         {
 
-            FileStream f = new FileStream(Application.persistentDataPath + "/settings.ini", FileMode.Open);
+            FileStream f = new FileStream(Application.dataPath + "/settings.ini", FileMode.Open);
             k = (SettingsSC)xml.Deserialize(f);
             if (gameObject.GetComponent<UI>()!=null)
             {

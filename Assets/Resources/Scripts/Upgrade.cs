@@ -12,7 +12,7 @@ public class Upgrade : MonoBehaviour {
        GetComponent<fire>().level++;
        GetComponent<fire>().range += 2 * GetComponent<fire>().level;
        GetComponent<fire>().damage+= (int)(0.2 * GetComponent<fire>().damage);
-        GetComponent<fire>().attackSpeed =(float)Math.Round((0.9f * GetComponent<fire>().attackSpeed),2);
+       GetComponent<fire>().attackSpeed =(float)Math.Round((0.9f * GetComponent<fire>().attackSpeed),2);
         
     }
     public void LevelUp(int level)

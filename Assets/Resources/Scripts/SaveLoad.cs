@@ -35,7 +35,7 @@ public class SaveLoad : MonoBehaviour
 
     public  void Save()
     {
-        var file = File.Create(Application.persistentDataPath + "/savedGames.rsave");
+        var file = File.Create(Application.dataPath + "/savedGames.rsave");
        
         var xs = new XmlSerializer(typeof(SerClass));
         var sC = ScriptableObject.CreateInstance<SerClass>();
@@ -66,7 +66,7 @@ public class SaveLoad : MonoBehaviour
     }
     public  void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/savedGames.rsave"))
+        if (File.Exists(Application.dataPath + "/savedGames.rsave"))
         {
             foreach (var item in GameObject.FindGameObjectsWithTag("Buildings"))
             {
@@ -74,7 +74,7 @@ public class SaveLoad : MonoBehaviour
             }
             
             var sc2 = ScriptableObject.CreateInstance<SerClass>();
-            var file = File.Open(Application.persistentDataPath + "/savedGames.rsave", FileMode.Open);
+            var file = File.Open(Application.dataPath + "/savedGames.rsave", FileMode.Open);
             var xml = new XmlSerializer(typeof(SerClass));
             sc2=(SerClass)xml.Deserialize(file);
            FindObjectOfType<UI>().gold = sc2.gold;
@@ -101,7 +101,8 @@ public class SaveLoad : MonoBehaviour
             file.Close();
             FindObjectOfType<SceneLoader>().merge("TowerDefence");
         }
-     
+        Time.timeScale = 1f;
+        
     }
 }
 

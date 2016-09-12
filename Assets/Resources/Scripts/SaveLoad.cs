@@ -77,9 +77,6 @@ public class SaveLoad : MonoBehaviour
             var file = File.Open(Application.persistentDataPath + "/savedGames.rsave", FileMode.Open);
             var xml = new XmlSerializer(typeof(SerClass));
             sc2=(SerClass)xml.Deserialize(file);
-
-            DontDestroyOnLoad(FindObjectOfType<UI>());
-            DontDestroyOnLoad(this);
            FindObjectOfType<UI>().gold = sc2.gold;
             FindObjectOfType<UI>().lives = sc2.lives;
             FindObjectOfType<UI>().waveCount = sc2.wave;

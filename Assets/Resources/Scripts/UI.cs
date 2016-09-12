@@ -200,7 +200,11 @@ public class UI : MonoBehaviour
     }
     public void OnRestartClick()
     {
-        SceneManager.LoadScene("TowerDefence");
+     
+        SceneManager.LoadScene("TowerDefence",LoadSceneMode.Single);
+        Time.timeScale = 1f;
+        StartCoroutine(Message(centerText,"",0.1f));
+        
     }
     public void OnBuyLifeClick(int lifeCost)
     {
@@ -265,20 +269,16 @@ public class UI : MonoBehaviour
         livesT.text = "Lives: " + lives + " \n  Gold:  " + gold + " ";
         randomText.text = "Time to random event: " + (int)randomTimer;
 
-        if (lives <= 0)
+        if (lives <= 0&&!gameOver)
         {
-            StartCoroutine(Message(centerText, "Game over "+playerName+"!\nYou reached "+score+"pts"));
-            
-            Time.timeScale = 0f;
-           
 
-            if (!gameOver)
-            {
 
+
+            CenterPanel.gameObject.SetActive(true);
+                StartCoroutine(Message(centerText, "Game over " + playerName + "!\nYou reached " + score + "pts", 50f));
+                Time.timeScale = 0f;
                 FindObjectOfType<Audio>().PlaySound(FindObjectOfType<Audio>().lose);
                 gameOver = true;
-
-            }
 
         }
         if ((creepsOnWave - deadCreeps) <= 0 && !wait)

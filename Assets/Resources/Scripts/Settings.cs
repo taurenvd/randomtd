@@ -15,7 +15,7 @@ public class Settings : MonoBehaviour
         k.volume = slider.value;
         k.mute = toggle.isOn;
         k.playerName = playerName.text;
-      
+        Debug.Log(playerName.text);
         var f = File.Create(Application.persistentDataPath + "/settings.ini");
         var xml = new XmlSerializer(typeof(SettingsSC));
         xml.Serialize(f, k);
@@ -31,11 +31,12 @@ public class Settings : MonoBehaviour
 
             FileStream f = new FileStream(Application.persistentDataPath + "/settings.ini", FileMode.Open);
             k = (SettingsSC)xml.Deserialize(f);
-            if (FindObjectOfType<UI>().playerName!=null)
+            if (gameObject.GetComponent<UI>()!=null)
             {
-                FindObjectOfType<UI>().playerName = playerName.text;
-            }
-            
+                gameObject.GetComponent<UI>().playerName = k.playerName;
+                Debug.Log(k.playerName);
+            }        
+            playerName.text =k.playerName;
             slider.value = k.volume;
             toggle.isOn = k.mute;
             f.Close();
@@ -50,7 +51,7 @@ public class Settings : MonoBehaviour
     public void SetActiveRec(GameObject go) { go.SetActive(!go.activeSelf); }
     void Start()
     {
-        DontDestroyOnLoad(this);
+  
         Load();
     }
 }

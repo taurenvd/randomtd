@@ -78,9 +78,14 @@ public class dest : MonoBehaviour
         if (gameObject.tag == "Boss")
         {
             GameObject.FindObjectOfType<UI>().gold += 50 * (int)GameObject.FindObjectOfType<UI>().waveCount;
+            FindObjectOfType<UI>().score += 5;
         }
-        else GameObject.FindObjectOfType<UI>().gold += 5 * (int)GameObject.FindObjectOfType<UI>().waveCount;
-        
+        else
+        {
+            GameObject.FindObjectOfType<UI>().gold += 5 * (int)GameObject.FindObjectOfType<UI>().waveCount;
+            FindObjectOfType<UI>().score += 1;
+        }
+
     }
 
     IEnumerator DeathClip(GameObject target,float aniTime)

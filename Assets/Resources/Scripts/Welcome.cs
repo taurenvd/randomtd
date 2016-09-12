@@ -6,7 +6,7 @@ public class Welcome : MonoBehaviour {
 
 	void Start ()
     {
-        FindObjectOfType<Settings>().Load();
+        
         // ogre.Play("attack_2", 0, 0.15f);
         ogre.SetBool("Attack",true);
 	}

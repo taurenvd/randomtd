@@ -40,6 +40,7 @@ public class UI : MonoBehaviour
     RaycastHit statusHit;
 
     public string info;
+    public string playerName;
 
     public float timeToWave;
     public float constTime = 4;
@@ -54,6 +55,7 @@ public class UI : MonoBehaviour
     public int price;
     public int waveCount = 1;
     public int lives = 50;
+    public int score;
 
     public bool wait = false;
     public bool chosePlatform = false;
@@ -85,12 +87,11 @@ public class UI : MonoBehaviour
     public ColorBlock z = new ColorBlock();
 
     public GameObject settings;
+
   //---------------------------------------------------------------------------------------
   // UNITY Section
     void Start()
-    {
-
-       
+    { 
         StartCoroutine(RandPrice());
         TowerTypeDownload(TowerType);
         StartCoroutine(Message(centerText, "Wave " + waveCount));
@@ -245,10 +246,16 @@ public class UI : MonoBehaviour
                 waveCount++;
                 creepsOnWave = (int)(creepsOnWave * 1.2f);
                 GameObject.FindObjectOfType<Spot>().nCreeps = 0;
-                GameObject.FindObjectOfType<UI>().deadCreeps = 0;
+                deadCreeps = 0;
+              
                 wait = false;
                 timeToWave = constTime;
+             
             }
+        }
+        if (wait&&timeToWave<0.2)
+        {
+            StartCoroutine(Message(centerText, "Wave "+waveCount));
         }
     }
     void LabelManager()
@@ -260,8 +267,10 @@ public class UI : MonoBehaviour
 
         if (lives <= 0)
         {
+            StartCoroutine(Message(centerText, "Game over "+playerName+"!\nYou reached "+score+"pts"));
+            
             Time.timeScale = 0f;
-            centerText.text = "Game Over for ";
+           
 
             if (!gameOver)
             {
@@ -274,11 +283,12 @@ public class UI : MonoBehaviour
         }
         if ((creepsOnWave - deadCreeps) <= 0 && !wait)
         {
-
-            StartCoroutine(Message(centerText, "Round Clear!"));
+            
+            StartCoroutine(Message(centerText, "You survived!",2f));
 
             wait = true;
         }
+        
     }//Gold/life/creeps etc counters;
     /// <summary>
     /// 300 secs to random event, calls OnRandomClick()
@@ -334,6 +344,14 @@ public class UI : MonoBehaviour
             build.gameObject.SetActive(false);
             buyLife.gameObject.SetActive(false);
             random.gameObject.SetActive(false);
+            restart.gameObject.SetActive(false);
+            resume.gameObject.SetActive(false);
+            options.gameObject.SetActive(false);
+            safe.gameObject.SetActive(false);
+            load.gameObject.SetActive(false);
+            exit.gameObject.SetActive(false);
+            Content.parent.gameObject.SetActive(false);
+            if (logPanel.parent.transform.position.y>0) logPanel.parent.transform.position = new Vector3(logPanel.parent.transform.position.x,- logPanel.parent.transform.position.y, logPanel.parent.transform.position.z);
         }
         if (target != null && (target.tag == "Buildings" || target.tag == "Mobs" || target.tag == "Boss"))
         {
@@ -507,12 +525,6 @@ public class UI : MonoBehaviour
                 progress -= increment;
                 yield return new WaitForSeconds(0.10f);
             }
-
-
-
-
-
-
             end = false;
         }
 

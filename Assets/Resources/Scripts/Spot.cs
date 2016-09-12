@@ -12,6 +12,7 @@ public class Spot : MonoBehaviour {
 
     public int nCreeps=1;
     public int BossDiv = 3;
+  
 
     public Transform green;
 

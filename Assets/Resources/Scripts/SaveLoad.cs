@@ -11,6 +11,8 @@ public class SaveLoad : MonoBehaviour
     public Button save;
     public Button load;
 
+
+
     void Start()
     {
         save.onClick.AddListener(Save);
@@ -47,7 +49,8 @@ public class SaveLoad : MonoBehaviour
         sC.towerName = FindObjectOfType<UI>().towerTypesL;
         sC.platforms = FindObjectOfType<UI>().platformNameL;
         sC.parent = FindObjectOfType<UI>().parent;
-
+        sC.score = FindObjectOfType<UI>().score;
+        sC.playerName=FindObjectOfType<UI>().playerName;
         foreach (var item in FindObjectsOfType<fire>())
         {
            
@@ -74,15 +77,18 @@ public class SaveLoad : MonoBehaviour
             var file = File.Open(Application.persistentDataPath + "/savedGames.rsave", FileMode.Open);
             var xml = new XmlSerializer(typeof(SerClass));
             sc2=(SerClass)xml.Deserialize(file);
-            
-            FindObjectOfType<UI>().gold = sc2.gold;
+
+            DontDestroyOnLoad(FindObjectOfType<UI>());
+            DontDestroyOnLoad(this);
+           FindObjectOfType<UI>().gold = sc2.gold;
             FindObjectOfType<UI>().lives = sc2.lives;
             FindObjectOfType<UI>().waveCount = sc2.wave;
             FindObjectOfType<UI>().randomTimer = sc2.randomTimer;
             Camera.main.transform.position = (Vector3)sc2.mCam;
-
+            FindObjectOfType<UI>().score = sc2.score;
             FindObjectOfType<UI>().towerPosL=(List<Vector3>)sc2.towersPos;
             FindObjectOfType<UI>().towerTypesL = (List<string>)sc2.towerName;
+            FindObjectOfType<UI>().playerName = sc2.playerName;
             for (int i = 0; i < sc2.towerName.Count; i++)
             {
                
@@ -96,6 +102,7 @@ public class SaveLoad : MonoBehaviour
             DestroyObject(sc2);
         
             file.Close();
+            FindObjectOfType<SceneLoader>().merge("TowerDefence");
         }
      
     }
@@ -107,12 +114,18 @@ public class SerClass: UnityEngine.ScriptableObject
     public int gold;
     public int lives;
     public int wave;
+    public int score;
+
     public UnityEngine.Vector3 mCam;
+
     public float randomTimer;
+
     public List<Vector3> towersPos;
     public List<string> towerName;
     public List<string> parent;
     public List<int> levels=new List<int>();
     public List<string> platforms;
+    public string playerName;
+
 }
 

@@ -11,11 +11,11 @@ public class Settings : MonoBehaviour
     public InputField playerName;
     public void Save()
     {
-        DontDestroyOnLoad(this);
         var k = ScriptableObject.CreateInstance<SettingsSC>();
         k.volume = slider.value;
         k.mute = toggle.isOn;
         k.playerName = playerName.text;
+      
         var f = File.Create(Application.persistentDataPath + "/settings.ini");
         var xml = new XmlSerializer(typeof(SettingsSC));
         xml.Serialize(f, k);
@@ -23,9 +23,6 @@ public class Settings : MonoBehaviour
     }
     public void Load()
     {
-
-
-
         var k = ScriptableObject.CreateInstance<SettingsSC>();
 
         var xml = new XmlSerializer(typeof(SettingsSC));
@@ -34,7 +31,11 @@ public class Settings : MonoBehaviour
 
             FileStream f = new FileStream(Application.persistentDataPath + "/settings.ini", FileMode.Open);
             k = (SettingsSC)xml.Deserialize(f);
-            playerName.text = k.playerName;
+            if (FindObjectOfType<UI>().playerName!=null)
+            {
+                FindObjectOfType<UI>().playerName = playerName.text;
+            }
+            
             slider.value = k.volume;
             toggle.isOn = k.mute;
             f.Close();
@@ -45,8 +46,13 @@ public class Settings : MonoBehaviour
             slider.value = 0.5f;
             toggle.isOn = false;
         }
-    }    
+    }
     public void SetActiveRec(GameObject go) { go.SetActive(!go.activeSelf); }
+    void Start()
+    {
+        DontDestroyOnLoad(this);
+        Load();
+    }
 }
 [System.Serializable]
 public class SettingsSC : ScriptableObject
@@ -54,4 +60,5 @@ public class SettingsSC : ScriptableObject
   public  float volume;
   public  bool mute;
   public string playerName;
+ 
 }

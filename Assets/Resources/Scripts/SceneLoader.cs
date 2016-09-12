@@ -6,12 +6,8 @@ public class SceneLoader : MonoBehaviour {
 
     public string levelName;
 
-    public Button start;
-
     //--------------------------------------
-    void Start()
-    {
-        start.onClick.AddListener(load);
+ void Start() { 
 
 #if UNITY_WEBGL
         Debug.Log("Webgl");
@@ -25,14 +21,13 @@ public class SceneLoader : MonoBehaviour {
 
 #endif
     }
-    void Update ()
-    {
-	
-	}
-
-    public  void load()
+    public  void load(string levelName)
     {
         SceneManager.LoadScene(levelName);
+    }
+    public void merge(string levelName)
+    {
+        SceneManager.MergeScenes(SceneManager.GetActiveScene(),SceneManager.GetSceneByName(levelName));
     }
 
 }
